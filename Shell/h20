@@ -1,0 +1,20 @@
+  592  ls
+  593  ls -1
+  594  tr 0189 abcd < ff1
+  595  tr a-z A-Z < ff1
+  596  tr a-zA-Z A-Za-z< ff1
+  597  tr a-zA-Z A-Za-z < ff1
+  598  tr -c 0-9 .
+  599  tr -c 0-9 . < ff1 
+  600  tr -c "0-9\n" . < ff1 
+  601  trans -d " " < ff2
+  602  trans -d " " < ff1
+  603  echo abcdefghi | sed -e 's/def/XXX/'
+  604  echo abcdefghidefghi | sed -e 's/def/XXX/'
+  605  echo abcdefghidefghi | sed -e 's/def/XXX/g'
+  606  man sed
+  607  history
+  608  history
+  609  history | tail -10
+  610  history | tail -10 > h20
+  611  history | tail -20 > h20

@@ -1,0 +1,3 @@
+﻿  listQueue.cpp
+c:\users\student\desktop\queue\listqueue\listqueue.cpp(42): warning C4101: 'new_bottom': ローカル変数は 1 度も使われていません。
+  listQueue.vcxproj -> C:\Users\Student\Desktop\Queue\x64\Debug\listQueue.exe
