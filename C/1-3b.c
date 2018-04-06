@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-int main(int argc, char *argv[]) {
+int main(int argc, char const *argv[]) {
     FILE *fp1, *fp2;
     int c;
 
     if(argv[1] == NULL){
-        printf("ERROR\n");
+        printf("ERROR: 引数が足りません\n");
         exit(1);
     }
 
