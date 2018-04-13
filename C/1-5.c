@@ -1,5 +1,3 @@
-// 未完成
-
 #include <stdio.h>
 
 typedef struct {
