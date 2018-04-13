@@ -11,9 +11,9 @@ typedef struct {
 BIN amount (BIN, BIN, BIN);
 
 int main(void) {
-    BIN printer_cable_box = {'Printer cable', 10, 500},
-    BIN terminal_cable_box = {'Terminal cable', 20, 700},
-    BIN network_cable_box = {'Network cable', 25, 300};
+    BIN printer_cable_box = {"Printer cable", 10, 500};
+    BIN terminal_cable_box = {"Terminal cable", 20, 700};
+    BIN network_cable_box = {"Network cable", 25, 300};
     
     BIN total = amount(
         printer_cable_box,
@@ -31,4 +31,7 @@ BIN amount(BIN printer, BIN terminal, BIN network){
     int cost_sum = printer.quantity * printer.cost 
     + terminal.quantity * terminal.cost 
     + network.quantity * network.cost;
+    BIN total = {"Total", quantity_sum, cost_sum};
+    return total;
+
 }
