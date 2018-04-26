@@ -1,1 +1,8 @@
 3JLab-report1/*
+*.aux
+*.dvi
+*.fdb_latexmk
+*.fls
+*.log
+text
+result
