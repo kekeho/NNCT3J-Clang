@@ -1,0 +1,365 @@
+\documentclass{jsarticle}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{listings}
+\usepackage{float}
+\lstset{%
+  % language={c++},
+  basicstyle={\small},%
+  identifierstyle={\small},%
+  commentstyle={\small\itshape},%
+  keywordstyle={\small\bfseries},%
+  ndkeywordstyle={\small},%
+  stringstyle={\small\ttfamily},
+  frame={tbrl}, %枠線
+  breaklines=true,
+  breakindent = 8.58pt,
+  columns=[l]{fullflexible},%
+  numbers=left,%
+  xrightmargin=0zw,%
+  xleftmargin=3zw,%
+  numberstyle={\scriptsize},%
+  stepnumber=1,
+  numbersep=1zw,%
+  lineskip=-0.0ex%
+}%ここまでプログラムリストを表示するやつ
+
+\makeatletter
+\newcommand{\subsubsubsection}{\@startsection{paragraph}{4}{\z@}%
+  {1.0\Cvs \@plus.5\Cdp \@minus.2\Cdp}%
+  {.1\Cvs \@plus.3\Cdp}%
+  {\reset@font\sffamily\normalsize}
+}
+\makeatother
+\setcounter{secnumdepth}{4}
+
+\title{工学実験実習　第1回\\ファイルとコマンド引数(オプション)に対する操作}
+
+\author{3年電子情報工学科　17番 竹村太希}
+\date{\today}
+\begin{document}
+    \maketitle
+    \newpage{}
+
+    \section{実習内容}
+        今回の実験では, C言語を用いてファイル操作及びコマンド引数を扱うプログラムを作成した. 　　
+
+    \section{実行環境}
+        今回の課題の実行環境を表\ref{t-1}に示す. 
+        %表１
+        \begin{table}[htbp]
+            \centering
+            \caption{課題の実行環境}
+            \label{t-1}
+            \begin{tabular}{|c||c|}
+                \hline
+                CPU & Intel(R) Core(TM) i7-7567U CPU @3.5GHz 2コア4スレッド \\
+                \hline
+                メモリ容量 & 16.00 GB \\
+                \hline
+                OS & macOS High Sierra \\
+                \hline
+                コンパイラ & gcc (Apple LLVM version 9.0.0 (clang-900.0.39.2)) \\
+                \hline
+                グラフ作成ソフトウェア & R言語 \\
+                \hline
+            \end{tabular}
+        \end{table}
+    
+    \section{実習結果}
+        この章では, 実習の結果を報告する. 
+        \subsection{課題1}
+            \label{kadai-1}
+            サイコロプログラムを作成する. プログラム上で乱数を発生させて, １から６までの数字を出力するプログラムを作成する. 
+            また, 20回サイコロを振って, その平均値を求める. 
+            \subsubsection{手法}
+                乱数の作成には, rand関数を用いる. 
+                srand関数でシード値を設定し, rand関数で乱数を実際に生成する. 
+                サイコロの範囲である1~6までの数字を発生させるには, rand()\%6+1とすればよい. 
+                
+                乱数を生成するごとにその値を配列に記憶させておき, その合計値を回数で割ることで平均値を算出できる. 
+            \subsubsection{プログラムソース}
+                \lstinputlisting[caption=課題1, label=1-1]{1-1.c}
+                
+            \subsubsection{プログラムの説明}
+                まずsrand関数でシード値を設定し, forループの中にrand関数を置くことで20回サイコロを振っている. そして整数型配列aにその値を記憶している.   
+                その後, forループで配列aの値をそれぞれ取り出し, 合計値を表す整数型配列sumに加算している. 最終的には人間に結果がわかるようstdioライブラリのprintf関数を用いてターミナルに出力している. 
+
+            \subsubsection{実行結果}
+                \lstinputlisting[caption=課題1の実行結果, label=1-1-result]{result/1-1.txt}
+
+            \subsubsection{実行結果の特徴}
+                1~6の範囲でまんべんなく乱数が生成されている. 平均値は数回実行しても毎回3に収束していた. 気になったので, 100回実行して平均値は毎回どのような値になるのか計測した. 
+                \subsubsubsection{計測プログラム}
+                    本プログラムはPython3を用いて記述した. 
+                    \lstinputlisting[caption=課題1を100回実行し平均値を取得するプログラム, label=1-1-script]{script/1.py}
+                \subsubsubsection{計測プログラムの実行結果}
+                    \lstinputlisting[caption=課題1を100回実行し平均値を取得するプログラムの実行結果, label=1-1-script-result]{result/script1.txt}
+                    \begin{figure}[H]
+                        \centering
+                        \includegraphics[width=12cm]{result/script1_graph.eps}
+                        \caption{実行結果のグラフ}
+                    \end{figure}
+
+            \subsubsection{考察}
+                実行結果より, まんべんなく乱数が生成されていることが確認できた. 
+
+        
+                
+        
+            
+            % subsubsection ${1/(\w+)(\W+$)?|\W+/?subsubsection name:_/g (end)
+        
+        \subsection{課題2}
+            乱数を用いて, 3桁のスロットを作成する. 
+            \subsubsection{手法}
+                \ref{kadai-1}章のサイコロと同じく, 乱数を用いる. 
+                Enterキーを押すごとに1桁づつ乱数を発生させ, 配列に格納する. 3つの乱数が出揃った時点で
+                値を比較し, 全て同じ値なら当たり, そうでなければはずれを表示する. 
+            \subsubsection{プログラムソース}
+                \lstinputlisting[caption=課題2, label=1-1]{1-2.c}
+            
+            \subsubsection{プログラムの説明}
+                はじめにスロットとして整数型配列aを定義する. 3桁のスロットなので大きさは3である. 
+                そしてsrand関数とtime関数を用いて乱数のシード値を設定している. \\
+                forループの中ではEnterキーが入力されたら乱数を発生させ, 配列aに格納している. 
+                もしループが3回目で値が全て同じならATARI, 値が違えばHAZUREを表示させている. 
+            
+            \subsubsection{実行結果}
+                \lstinputlisting[caption=課題2の実行結果, label=1-2-result]{result/1-2.txt}
+            
+            \subsubsection{実行結果の特徴}
+                当たり前だが, なかなか当たりが出ることはない. 
+            \subsubsection{考察}
+                スロットとしては, あまりにも当たりが出る回数が低くつまらないと感じた. 
+            
+        \subsection{課題3A}
+            コマンドライン引数を用いてプログラムを作成する. 
+            受け取ったコマンドライン引数を全て表示するプログラムを作成する. 
+            \subsubsection{手法}
+                main関数の引数としてargc, argvを指定することでコマンドライン引数を受け取れる. 
+                argcには引数の数, argvには2次元配列で引数が渡される. 
+            
+            \subsubsection{プログラムソース}
+                作成したプログラムを以下に示す. 
+                \lstinputlisting[caption=課題3A, label=1-3a]{1-3a1.c}
+
+                なお, argvが2次元配列であることを確かめるために以下のプログラムも作成した. 
+                \lstinputlisting[caption=課題3Aを変更したもの, label=1-3a2]{1-3a2.c}
+            \subsubsection{プログラムの説明}
+                単純にargcを用いて引数の数を出力し, 次にfor文でargvを用いて受け取った引数の中身を
+                出力している. 
+                Listing\ref{1-3a2}のプログラムでは多次元配列であることを確認するため受け取った引数の最初の1文字を出力している. 
+            
+            \subsubsection{実行結果}
+                実行時には, 引数としてhoge fuga piyoを与えた. 
+                \lstinputlisting[caption=課題3Aの実行結果, label=1-3a1-result]{result/1-3a1.txt}
+                Listing\ref{1-3a2}のプログラムも同じ引数を与えた. 
+                結果を以下に示す. 
+                \lstinputlisting[caption=課題3Aの多次元配列確認プログラムの実行結果, label=1-3a2-result]{result/1-3a2.txt}
+                
+            \subsubsection{実行結果の特徴}
+                argv[0]に実行時に使ったコマンドが入っているのが特徴である. 
+                Listing\ref{1-3a2}のプログラムでは多次元配列であることが確認できている. 
+            \subsubsection{考察}
+                argv[0]には引数ではなく実行時のコマンドが入るので, 間違えて第1引数を使いたい際にargv[0]を
+                指定しないよう注意が必要と考えられる. 
+
+        \subsection{課題3B}
+            copyコマンドを作成する. 
+            \subsubsection{手法}
+                ファイルから1文字ずつ読みこみ, ファイルに1文字ずつ書き出す. 
+                引数の最初が-(マイナス記号)の場合はオプションとみなし, オプションに応じた動作をする. 
+
+            \subsubsection{プログラムソース}
+                \lstinputlisting[caption=課題3B, label=1-3b]{1-3b.c}
+            
+            \subsubsection{プログラムの説明}
+                引数が何も与えられていない場合はその旨を出力しプログラムを終了する. 
+                引数が与えられた場合最初の文字が-(マイナス記号)かどうかをチェックし, 
+                その場合は次の文字をチェックしてそれに応じて条件分岐する. 
+                -iであれば上書きされるファイルが存在する場合に確認を取る. 
+                -fであればコピー先に同名のファイルが存在する場合にも警告せず, 上書きを行う. \\
+                コピー元のファイルが存在しない場合にはプログラムを終了し, コピー元とコピー先が同じファイルの場合もプログラムを終了する. 
+                これらのチェックを一通り受け終えたあと, コピー元のファイルを読み込み1文字ずつコピー先に書き込んでいく. 
+
+                最後にfclose関数を用いてファイルを閉じる. 
+
+            \subsubsection{実行結果}
+                ファイルが正常にコピーできた場合はUnixの精神に基づき何も出力しない. 
+                以下に, コピーするファイルが存在しない場合の出力結果を示す. 
+                \lstinputlisting[caption=ファイルが存在しない場合, label=1-3b-result-nofile]{result/1-3b-nofile.txt}
+
+            \subsubsection{実行結果の特徴}
+                無事にファイルコピーが出来ている
+            \subsubsection{考察}
+                実際のUnixシステムのcopyコマンドほどのオプションはないが, 実用に耐えている. 
+            
+        \subsection{課題4}
+            構造体を定義し, 簡単な計算を行う. 
+            \subsubsection{プログラムソース}
+                \lstinputlisting[caption=課題4, label=1-4]{1-4.c}
+            
+            \subsubsection{プログラムの説明}
+                文字列型配列nameと整数型配列quantity, costを含む
+                構造体binを定義し, 箱と見立てる. 
+                プリンターケーブルの箱, ターミナルケーブルの箱, ネットワークケーブルの箱と見立て実体化し, 値を代入する. 
+                最後にそれぞれの箱の合計値を計算し出力する.  
+            \subsubsection{実行結果}
+                \lstinputlisting[caption=課題4の実行結果, label=1-4-result]{result/1-4.txt}
+
+            \subsubsection{実行結果の特徴}
+                実行結果5より,  3つのケーブルそれぞれについて個数や1個あたりの金額, 箱の中身の総額が
+                正しく表示されていることが分かる . 
+            
+            \subsubsection{考察}
+                久しぶりに構造体の使い方を思い出すこととなった. 
+                小規模なプログラムでは恩恵を受けることは少ないかもしれないが, 大きめのプログラムを作る上で
+                必須のテクニックであろう. 
+        
+        \subsection{課題5}
+            課題4の合計値の計算部分を関数化する.
+            \subsubsection{プログラムソース}
+                \lstinputlisting[caption=課題5, label=1-5]{1-5.c}
+            
+            \subsubsection{実行結果}
+                \lstinputlisting[caption=課題5の実行結果, label=1-5-result]{result/1-5.txt}
+            
+            \subsubsection{実行結果の特徴}
+                特にない
+            
+            \subsubsection{考察}
+                関数化することで全体の計算処理の記述がしやすくなった. 
+
+        \subsubsection{課題6}
+            課題5の関数への受け渡しを, 値渡しから参照渡しへと変更する. 
+            \subsubsection{手法}
+                関数への受け渡しを参照渡しへと変更するので, ポインタを用いる. 
+            \subsubsection{プログラムソース}
+                \lstinputlisting[caption=課題6, label=1-6]{1-6.c}
+            \subsubsection{実行結果}
+                \lstinputlisting[caption=課題6の実行結果, label=1-6-result]{result/1-6.txt}
+            \subsubsection{実行結果の特徴}
+                課題5と同じになっている. 
+
+            \subsubsection{考察}
+                ポインタを用いることで無駄なメモリを使用せずに済んでいると考えられる. 
+        
+        \subsection{課題7}
+            \label{kadai7}
+            構造体配列を用いてラップタイマーを作成する. 
+            \subsubsection{手法}
+                \label{syuho}
+                時間・分・秒を記録する構造体を定義する. 
+                その構造体配列を必要なラップ分作成し, それぞれにラップタイムを記録する. 
+                最後にラップタイムの合計値を記録する構造体を作り, 合計値を計算し格納する. 
+            \subsubsection{プログラムソース}
+                \lstinputlisting[caption=課題7, label=1-7]{1-7.c}
+            \subsubsection{プログラムの説明}
+                \ref{syuho}章で説明したことに加え, 入力者が忙しい場合を考慮して60進数以外での入力に対応している. 
+                例として90分80秒などという値が入力されても1時間31分20秒と記録されるようにしている. 
+            \subsubsection{実行結果}
+                \lstinputlisting[caption=課題7の実行結果, label=1-7-result]{result/1-7.txt}
+
+            \subsubsection{実行結果の特徴}
+                60進数でない値を入力しても, 考慮して合計時間が計算されている. 
+            
+            \subsubsection{考察}
+                構造体配列の使い方を思い出すこととなった. この手法を使うことで効率的にプログラムを作成できると考えられる. 
+                
+            
+        \subsection{課題8}
+            \ref{kadai7}で作成したプログラムの合計値計算部分を関数化する. 
+            \subsubsection{手法}
+                関数の引数を, 通常の配列を受け取る書き方にすればよい. 
+            \subsubsection{プログラムソース}
+                \lstinputlisting[caption=課題8, label=1-8]{1-8.c}
+            \subsubsection{実行結果}
+                \lstinputlisting[caption=課題8の実行結果, label=1-8-result]{result/1-7.txt}
+                % 1-7と一緒
+            \subsubsection{実行結果の特徴}
+                記述通り, \ref{kadai7}章と同じ実験結果となった. 
+            \subsubsection{考察}
+                構造体配列を引数に取る関数の書き方を久しぶりに思い出せた. 
+
+        \subsection{課題9}
+            正三角形を描画する. 
+            \subsubsection{手法}
+                三角関数を用いて各頂点の座標を計算し, ファイルに保存する. 
+                頂点の座標を求める際は, 円の中に三角形を描くことを考え, 120度ずつ円の周りを周り点を置いていく. 
+                その後R言語でグラフにプロットする. 
+            \subsubsection{プログラムソース}
+                \lstinputlisting[caption=課題9, label=1-9]{1-9.c}
+
+            \subsubsection{プログラムの説明}
+                math.hに定義されているsin関数とcos関数を用いて, 120度ずつ点を作成する. 
+                Point構造体を定義しその構造体配列に値を格納後, ファイルに出力する. 
+            \subsubsection{実行結果}
+                計算結果をテキストファイルに保存した. ファイルの中身は以下の通り. 
+                \lstinputlisting[caption=課題9の実行結果, label=1-8-result]{triangle.dat}
+                R言語を用いてグラフにプロットした結果の画像を以下に示す. 
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=12cm]{result/Triangle.eps}
+                    \caption{課題9の実行結果のグラフ}
+                \end{figure}
+            \subsubsection{実行結果の特徴}
+                正三角形が描けている. 
+
+        \subsection{課題10}
+            正四角形を描画する. 
+            \subsubsection{手法}
+                三角関数を用いて各頂点の座標を計算し, ファイルに保存する. 
+                頂点の座標を求める際は, 円の中に四角形を描くことを考え, 45度ずつ円の周りを周り点を置いていく. 
+                その後R言語でグラフにプロットする. 
+            \subsubsection{プログラムソース}
+                \lstinputlisting[caption=課題10, label=1-10]{1-10.c}
+
+            \subsubsection{プログラムの説明}
+                math.hに定義されているsin関数とcos関数を用いて, 45度ずつ点を作成する. 
+                Point構造体を定義しその構造体配列に値を格納後, ファイルに出力する. 
+            \subsubsection{実行結果}
+                計算結果をテキストファイルに保存した. ファイルの中身は以下の通り. 
+                \lstinputlisting[caption=課題10の実行結果, label=1-10-result]{rect.dat}
+                R言語を用いてグラフにプロットした結果の画像を以下に示す. 
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=12cm]{result/rect.eps}
+                    \caption{課題10の実行結果のグラフ}
+                \end{figure}
+            \subsubsection{実行結果の特徴}
+                正四角形が描けている. 
+        
+        \subsection{課題11}
+            星型を描画する. 
+            \subsubsection{手法}
+                三角関数を用いて各頂点の座標を計算し, ファイルに保存する. 
+                頂点の座標を求める際は, 円の中に十角形を描くことを考え, 円を10等分して円の周りを周り点を置いていく. 
+                その後R言語でグラフにプロットする. 
+            \subsubsection{プログラムソース}
+                \lstinputlisting[caption=課題11, label=1-11]{1-11.c}
+
+            \subsubsection{プログラムの説明}
+                math.hに定義されているsin関数とcos関数を用いて, 円の外周の10等分ずつ点を作成する. 
+                なお, 2回に1回x座標とy座標を1/2して星のくぼみを作成している. 
+                Point構造体を定義しその構造体配列に値を格納後, ファイルに出力する. 
+            \subsubsection{実行結果}
+                計算結果をテキストファイルに保存した. ファイルの中身は以下の通り. 
+                \lstinputlisting[caption=課題11の実行結果, label=1-11-result]{star.dat}
+                R言語を用いてグラフにプロットした結果の画像を以下に示す. 
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=12cm]{result/star.eps}
+                    \caption{課題11の実行結果のグラフ}
+                \end{figure}
+            \subsubsection{実行結果の特徴}
+                星が描けている. 
+
+            \subsubsection{考察}
+                きれいな星型が描けている. 点と点を線で結べていないため見づらいので, R言語の力をつけたい. 
+
+                
+                
+
+
+
+\end{document}
