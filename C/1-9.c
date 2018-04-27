@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <math.h>
 
-#define PI 3.141592
-
 typedef struct{
     double x;
     double y;
@@ -13,7 +11,6 @@ FILE *file;
 int main(){
     //正三角形を作成する
     //for R-lang
-    int len = 10;
     Point triangle[3];
 
     for(int i = 0; i < 3; i++){
