@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void printResult(int* array, int length){
     int i;
 
     printf("[ ");
-    for(i = 0; i <  length; i++)
-    {
+    for(i = 0; i <  length; i++){
         printf("%d ", array[i]);
     }
     printf(" ]\n");   
@@ -16,8 +16,7 @@ void printResult(int* array, int length){
 int GetPivot(int array[], int start, int end){
 	int center = (end - start) / 2 + start;
 
-	if (array[start] >= array[center] && array[end] >= array[center])
-		{
+	if (array[start] >= array[center] && array[end] >= array[center]){
 			if(array[start] >= array[end])
 			{
 				return array[end];
@@ -27,8 +26,7 @@ int GetPivot(int array[], int start, int end){
 				return array[start];
 			}
 		}
-		else if (array[start] <= array[center] && array[end] <= array[center])
-		{
+		else if (array[start] <= array[center] && array[end] <= array[center]){
 			if (array[start] <= array[end])
 			{
 				return array[end];
@@ -118,7 +116,7 @@ int main(){
     }
         
     for(i = 0; i < num; i++ ){
-        array[i] = rand() % 100;
+        array[i] = rand();
     }
     
     QuickSort(array, 0, num - 1);
@@ -130,8 +128,7 @@ int main(){
         printf("続けますか? 1/0 : ");
         scanf("%d", &i);
 
-        if(i == 0)
-        {
+        if(i == 0){
             break;
         }
 
@@ -140,14 +137,12 @@ int main(){
 
         array = realloc(array, sizeof(int) * num);
         
-        if(array == NULL)
-        {
-            printf("Error : Out of memory");
+        if(array == NULL){
+            printf("Error: Out of memory");
             exit(1);
         }
         
-        for(i = length; i < num; i++ )
-        {
+        for(i = length; i < num; i++ ){
             array[i] = rand() % 100;
         }
 

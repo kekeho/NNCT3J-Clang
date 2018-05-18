@@ -29,8 +29,8 @@ void calcXY(double radius, Point* point, int n){
   double theta = 0;
     
   for(i = 0; i  < n; i++){
-      point[i].x = radius * cos(theta);
-      point[i].y = radius * sin(theta);
+      point[i].x = radius * cos(theta) + 90;
+      point[i].y = radius * sin(theta) + 90;
       theta += deltaTheta;
     }
 }
@@ -51,26 +51,33 @@ void Rotate( double theta, Point* point, int n){
 }
 
 int main(int argc, char* argv[]){
-  if(argc < 4){
+  if(argc < 3){
       printf("Error");
       return 1;
     }
-
-  double radius = atof(argv[1]);
-  int n = atoi(argv[2]);
-  int deg = atoi(argv[3]);
+  
+  //argv[1] = n角形
+  int n = atof(argv[1]);
+  double radius = 360 / n;
+  //argv[2] = 回転させる角度
+  int deg = atoi(argv[2]);
     
   Point* point = talloc(n);
     
   calcXY(radius, point, n);
-
-  Rotate(radians(deg), point, n);
-        
   int i;
   for(i = 0; i < n ; i++){
       printf("%f %f\n", point[i].x, point[i].y );
     }
   printf("%f %f\n", point[0].x, point[0].y );
+
+  //回転
+  Rotate(radians(deg), point, n);
+  for(i = 0; i < n ; i++){
+      printf("%f %f\n", point[i].x, point[i].y );
+    }
+  printf("%f %f\n", point[0].x, point[0].y);
+
     
   return 0;
 }  

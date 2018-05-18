@@ -12,11 +12,10 @@ double calcRad(int dig){
 
 
 
-int calcXY(double radius, Point point[]){
+void calcXY(double radius, Point point[]){
 	int i;
 	double theta = 0;
 	double dTheta = calcRad(120);
-	
 	
 	for(i = 0; i < 4; i++){
 		point[i].x = radius * cos(theta);
@@ -25,8 +24,7 @@ int calcXY(double radius, Point point[]){
 	}
 }
 
-int main()
-{
+int main(){
     Point point[4];
 
     calcXY(5, point);
