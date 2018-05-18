@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int main(){
-	int *str;
+	char *str;
 	str = (char*)malloc(sizeof(char) * 100);
 	if(str == NULL){
 		printf("out of memory");
