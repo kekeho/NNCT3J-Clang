@@ -1,0 +1,11 @@
+#!/bin/csh
+if($# == 1) then
+    set filename = `echo $1 | awk '{sub(".tex","");print $0;}'`
+    platex $filename.tex
+    platex $filename.tex
+    xdvi $filename.dvi
+    exit()
+
+endif
+echo "引数が足りないか多すぎます"
+exit(-1)

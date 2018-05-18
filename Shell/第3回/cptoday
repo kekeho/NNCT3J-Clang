@@ -1,0 +1,10 @@
+#!/bin/csh
+#ファイルを今日の日付入りファイルにコピーするスクリプト
+
+if ($# == 1) then
+    set now = `date "+%Y%m%d"`
+    cp $1 $1.${now}
+    exit()
+endif
+echo "引数が足りないか、多すぎます"
+exit(-1)

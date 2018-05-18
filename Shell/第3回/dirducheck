@@ -1,0 +1,9 @@
+#!/bin/csh
+cd ~/
+touch ducash
+echo "Your home directory du check" > ducash
+echo "" >> ducash
+du -s ./*/ >> ducash
+mail -s "Subject: HomeDir du check" 15316@g.nagano-nct.ac.jp < ducash
+rm ducash
+
