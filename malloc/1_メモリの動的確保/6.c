@@ -33,14 +33,13 @@ void calcXY(double radius, Point* point, int n){
 
 
 int main(int argc, char* argv[]){
-    if(argc < 3){
+    if(argc < 2){
         printf("Error");
         return 1;
       }
   
-    double radius = atof(argv[1]);
-    printf("%s\n", argv[1]);
-    int n = atoi(argv[2]);
+    double radius = 360 / atof(argv[1]);
+    int n = atoi(argv[1]);
     
     Point* point = talloc(n);
     

@@ -1,7 +1,8 @@
 #include <stdio.h>
+#define STRING_WIDTH 20
 int main(){
-	char string[20];
-	scanf("%s", string);
-	printf("%s\n", string);
+	char string[STRING_WIDTH];
+	fgets(string, STRING_WIDTH, stdin);
+	fputs(string, stdout);
 	return 0;
 }
