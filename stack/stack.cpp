@@ -1,70 +1,72 @@
 #include <stdio.h>
-#include <stdlib.h>
-
 #define HEIGHT 5
-struct Stack {
+
+
+struct _Stack {
 	int stack[HEIGHT];
 	int volume;
 };
+typedef struct _Stack Stack;
 
-int init(struct Stack *stack) {
-	//forループで初期化
-	for (int i = 0; i < HEIGHT; i++)
-	{
+
+int init(Stack *stack) {
+	//スタックの格納配列の初期化
+	for (int i = 0; i < HEIGHT; i++) {
 		stack->stack[i] = 0;
 	}
-	//現在位置を0番に指定
+	//現在位置を0に設定
 	stack->volume = 0;
 	return 0;
 }
 
-int push(struct Stack *stack, int number) {
-	if (stack->volume >= HEIGHT) { //スタックが満杯時のスタックオーバーフロー対策
-		printf("ERROR: Stack overflow\n");
-		exit(1);
-	} else {
-		//受け付けたnumberを位置に代入
-		stack->stack[stack->volume] = number;
-		//位置を一つ上にあげる
-		stack->volume += 1;
+
+int push(Stack *stack, int num) {
+	//Stack Overflow対策
+	if (stack->volume >= HEIGHT) {
+		return -1;
+	}
+	else {
+		//引数で受け取った数を積み上げ
+		stack->stack[stack->volume] = num;
+		stack->volume++;
 	}
 	return 0;
 }
 
-int pop(struct Stack *stack) {
-	if (stack->volume == 0) { //スタックが空の時のスタックアンダーフロー対策
-		printf("ERROR: Stack underflow\n");
-		exit(1);
-	} else {
-		//位置を一つ下げる
-		stack->volume -= 1;
-		//returnする変数にスタックの一番上の値を代入してpopを実現
+
+int pop(Stack *stack) {
+	//Stack Underflow対策
+	if (stack->volume == 0) {
+		return -1;
+	}
+	else {
+		stack->volume--;
 		int out = stack->stack[stack->volume];
-		//popし終わったので0を代入して初期化
 		stack->stack[stack->volume] = 0;
-		//popした値を返す
 		return out;
 	}
 }
 
-void printTower(struct Stack stack) {
-	//forループで現在のスタック内の値を一覧表示
-	for (int i = 0; i < HEIGHT; i++) {
-		printf("%d ", stack.stack[i]);
+
+void printStack(Stack *stack) {
+	for (int i = 0; i < HEIGHT; i++){
+		printf("%d ", stack->stack[i]);
 	}
 	printf("\n");
 }
 
-int main() {
-	struct Stack stack;
 
+int main() {
+	Stack stack;
 	init(&stack);
+
 	push(&stack, 10);
 	push(&stack, 20);
-	printTower(stack);
+	push(&stack, 30);
 	printf("%d\n", pop(&stack));
 	printf("%d\n", pop(&stack));
-	printTower(stack);
-	pop(&stack);
-	return 0;
+	printf("%d\n", pop(&stack));
+	push(&stack, 40);
+
+	printStack(&stack);
 }
