@@ -1,143 +1,161 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #define HEIGHT 5
 #define TOWERS 3
+#define True 1
+#define False 0
 
-struct Stack {
-	int stack[HEIGHT];
-	int volume;
+#define scanf_s(fmt, ... ) scanf(fmt, __VA_ARGS__ ) //FOR NON-MS COMPILER/
+
+struct _Stack {
+        int stack[HEIGHT];
+        int volume;
 };
+typedef struct _Stack Stack;
 
-int init(struct Stack *stack) {
-	//forループで初期化
-	for (int i = 0; i < HEIGHT; i++)
-	{
-		stack->stack[i] = 0;
-	}
-	//現在位置を0番に指定
-	stack->volume = 0;
-	return 0;
+
+int init(Stack *stack) {
+        //スタックの格納配列の初期化
+        for (int i = 0; i < HEIGHT; i++) {
+                stack->stack[i] = 0;
+        }
+        //現在位置を0に設定
+        stack->volume = 0;
+        return 0;
 }
 
-int push(struct Stack *stack, int number) {
-	if (stack->volume >= HEIGHT) { //スタックが満杯時のスタックオーバーフロー対策
-		printf("ERROR: Stack overflow\n");
-		exit(1);
-	} else {
-		//受け付けたnumberを位置に代入
-		stack->stack[stack->volume] = number;
-		//位置を一つ上にあげる
-		stack->volume += 1;
-	}
-	return 0;
+
+int push(Stack *stack, int num) {
+        //Stack Overflow対策
+        if (stack->volume >= HEIGHT) {
+                return -1;
+        }
+        else {
+                //引数で受け取った数を積み上げ
+                stack->stack[stack->volume] = num;
+                stack->volume++;
+        }
+        return 0;
 }
 
-int pop(struct Stack *stack) {
-	if (stack->volume == 0) { //スタックが空の時のスタックアンダーフロー対策
-		printf("ERROR: Stack underflow\n");
-		exit(1);
-	} else {
-		//位置を一つ下げる
-		stack->volume -= 1;
-		//returnする変数にスタックの一番上の値を代入してpopを実現
-		int out = stack->stack[stack->volume];
-		//popし終わったので0を代入して初期化
-		stack->stack[stack->volume] = 0;
-		//popした値を返す
-		return out;
-	}
+
+int pop(Stack *stack) {
+        //Stack Underflow対策
+        if (stack->volume == 0) {
+                return -1;
+        }
+        else {
+                stack->volume--;
+                int out = stack->stack[stack->volume];
+                stack->stack[stack->volume] = 0;
+                return out;
+        }
 }
 
-void printTower(struct Stack *stack) {
-	//forループで現在のスタック内の値を一覧表示
-	for (int i = 0; i < HEIGHT; i++) {
-		printf("%d ", stack->stack[i]);
-	}
+
+void printStack(Stack *stack) {
+        for (int i = 0; i < HEIGHT; i++) {
+                printf("%d ", stack->stack[i]);
+        }
+        printf("\n");
 }
 
-int enableStack(struct Stack *fromTower, struct Stack *toTower){
-	if (toTower->volume == 0 && fromTower->volume != 0) {　//移動先の塔が空の場合
-		return 1;
-	} else if (toTower->stack[fromTower->volume - 1] > fromTower->stack[toTower->volume - 1] && fromTower->volume != 0) {　//移動元の塔の最上位の値が移動先の塔の最上位の値より大きい場合
-		return 1;
-	} else { //その他の場合は移動が不可能
-		return 0;
-	}
+
+int enableStack(Stack *from_tower, Stack *to_tower) {
+        if (from_tower->volume == 0) {
+                return false;
+        }
+        if ((from_tower->stack[from_tower->volume - 1] < to_tower->stack[to_tower->volume - 1]) || to_tower->volume == 0) {
+                //移動元のタワーの最上位の値が、移動先の最上位の値より大きい もしくは移動先が
+                return True;
+        }
+        else {
+                return False;
+        }
 }
 
-//クリア判定
-int checkFinish(struct Stack *tower, int blocks){
-	int cnt = blocks;
-	for (int i = 0; i < cnt; i++) {
-		if(tower->stack[i] != blocks)
-			return 0;
-		blocks--;
-	}
-	return 1;
+
+int checkFinish(Stack *tower, int blocks) {
+        //blocksは段数
+        //すべての値が0になっているかチェック
+        for (int i = 0; i < blocks; i++) {
+                if (tower->stack[i] != 0) {
+                        return False;
+                }
+        }
+        return True;
 }
+
+
+void printTower(Stack *towers, int blocks) {
+        for (int i = 0; i < TOWERS; i++){
+                printf("%d番目\t", i);
+        }
+        printf("\n========================\n");
+        for (int i = blocks - 1; i >= 0; i--){
+                for (int j = 0; j < TOWERS; j++) {
+                        printf("%d\t", towers[j].stack[i]);
+                }
+                putchar('\n');
+        }
+}
+
 
 int main() {
-	int i;
-	int count=1;
-	int fromTower, toTower;
-	int tempNumber;
-	int blocks;
-	struct Stack tower[TOWERS];
-	
-	//3塔の初期化
-	for (i = 0; i < TOWERS; i++) {
-		init(&tower[i]);
-	}
-	
-	printf("段数を選んで下さい: 3,4,5\n");
-	scanf("%d", &blocks);
-	//段数が3~5かチェック
-	if (blocks < 3) {
-		puts("少なすぎます");
-		exit(1);
-	} else if (blocks > 5) {
-		puts("多すぎます");
-		exit(1);
-	}
-	
-	//初期設定。1つめの塔にすべてのブロックを積む。
-	for (i = blocks; i > 0; i--) {
-		push(&tower[0], i);
-	}
-	
-	//塔の状態を表示する
-	for (i = 0; i < blocks; i++) {
-		printf("%d:", i + 1);
-		printTower(&tower[i]);
-	}
-	putchar('\n');
-	
-	//ここからがゲーム本体
-	while (true) {
-		printf("%d回目の移動です.\n", count);
-		printf("どの搭からどの搭へ移動させますか?[?>?]:"); scanf("%d>%d", &fromTower, &toTower);
-		
-		//移動させる
-		if (enableStack(&tower[fromTower - 1], &tower[toTower - 1]) == 1){
-			push(&tower[toTower - 1], pop(&tower[fromTower - 1]));
-		} else {
-			printf("ルール: 移動できません。\n");
-		}
-		
-		//塔の状態表示
-		for (i = 0; i < blocks; i++) {
-			printf("%d:", i + 1);
-			printTower(&tower[i]);
-		}
-		putchar('\n');
-		
-		//終わったかどうか
-		if ((checkFinish(&tower[1], blocks) == 1) || (checkFinish(&tower[2], blocks) == 1)) {
-			printf("CLEAR!!\n");
-			break;
-		}
-		count++;
-	}
-	return 0;
+        int count = 1;
+        int from_tower, to_tower;
+        int tempNum;
+        int blocks; //段数
+        int flag;
+
+        Stack towers[TOWERS];
+        printf("段数を選んでください(3〜5): ");
+        scanf_s("%d", &blocks);
+
+        //初期化
+        for (int i = 0; i < TOWERS; i++) {
+                init(&towers[i]);
+        }
+
+        //第1塔に決められたブロックを積み重ね
+        for (int i = blocks; i > 0; i--) {
+                push(&towers[0], i);
+        }
+
+        printf("GAME START!\n");
+
+
+        //ゲーム開始
+        while (True){
+                printf("[%d回目]\n", count);
+                printTower(towers, blocks);
+                printf("移動元と移動先を入力してください: ");
+                scanf_s("%d %d", &from_tower, &to_tower);
+
+                //存在しない塔への移動を弾く
+                if (from_tower >= TOWERS || to_tower >= TOWERS) {
+                        printf("存在しない塔が指定されました。リトライ\n");
+
+                }
+                //同じ塔から同じ塔に移動するのは無意味
+                else if (from_tower == to_tower) {
+                        printf("同じ塔の上で円盤が跳ねるだけで無意味。リトライ\n");
+                } else {
+                        if (enableStack(&towers[from_tower], &towers[to_tower]) == True) {
+                                //移動可能なら移動
+                                push(&towers[to_tower], pop(&towers[from_tower]));
+                                count++;
+                        } else {
+                                printf("移動できません。やり直し\n");
+                        }
+                }
+            
+            //クリア判定
+            if(checkFinish(&towers[0], blocks) && checkFinish(&towers[1], blocks)){
+                printf("CLEAR!");
+                break;
+            }
+            
+            
+        }
 }
