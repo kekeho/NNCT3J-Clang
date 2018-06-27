@@ -60,13 +60,16 @@ int main() {
 	Stack stack;
 	init(&stack);
 
-	push(&stack, 10);
-	push(&stack, 20);
-	push(&stack, 30);
-	printf("%d\n", pop(&stack));
-	printf("%d\n", pop(&stack));
-	printf("%d\n", pop(&stack));
-	push(&stack, 40);
-
+	push(&stack, 10); //10を追加
+	push(&stack, 20); //20を追加
+	push(&stack, 30); //30を追加
+	push(&stack, 40); //40を追加
+	push(&stack, 50); //50を追加
 	printStack(&stack);
+	printf("%d\n", pop(&stack)); //50がpopされる
+	printf("%d\n", pop(&stack)); //40がpopされる
+	printf("%d\n", pop(&stack)); //30がpopされる
+	printf("%d\n", pop(&stack)); //20がpopされる
+	printf("%d\n", pop(&stack)); //10がpopされる
+	return 0;
 }
