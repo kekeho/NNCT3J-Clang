@@ -1,26 +1,26 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #define QUEUE_SIZE 4
 
 int queue[QUEUE_SIZE];
 int quantity = 0;
 
 int initQueue() {
-	for (int i = 0; i < QUEUE_SIZE; i++){
+	for (int i = 0; i < QUEUE_SIZE; i++) {
 		queue[i] = 0;
 	}
 	return 0;
 }
 
 int enqueue(int data) {
-	//ƒGƒ‰[ˆ—
-	if (quantity >= QUEUE_SIZE){ //c—Ìˆæ‚Ì–³‚¢
-		return -101; 
+	//ã‚¨ãƒ©ãƒ¼å‡¦ç†
+	if (quantity >= QUEUE_SIZE) { //æ®‹é ˜åŸŸã®ç„¡ã„æ™‚
+		return -101;
 	}
-	if (data <= 0) { //•‰‚Ì’l‚ª“ü—Í‚³‚ê‚½Û
+	if (data <= 0) { //è² ã®å€¤ãŒå…¥åŠ›ã•ã‚ŒãŸéš›
 		return -102;
 	}
 
-	//”z—ñ‚ÌƒLƒ…[‚Éƒf[ƒ^‚ğ•Û‘¶‚·‚é
+	//é…åˆ—ã®ã‚­ãƒ¥ãƒ¼ã«ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜ã™ã‚‹
 	queue[quantity] = data;
 	quantity++;
 	return 0;
@@ -32,9 +32,9 @@ int dequeue() {
 		return -201;
 	}
 	int dequeueValue = queue[0];
-	
-	//Ä\’z
-	for (int i = 0; i < quantity; i++){
+
+	//å†æ§‹ç¯‰
+	for (int i = 0; i < quantity; i++) {
 		queue[i] = queue[i + 1];
 	}
 	quantity--;
@@ -44,33 +44,33 @@ int dequeue() {
 	return dequeueValue;
 }
 
-//ƒLƒ…[”z—ñ‚Ì’†g‚ğˆê——•\¦
+//ã‚­ãƒ¥ãƒ¼é…åˆ—ã®ä¸­èº«ã‚’ä¸€è¦§è¡¨ç¤º
 int showQueue() {
 	putchar('|');
-	for (int i = 0; i < QUEUE_SIZE; i++){
+	for (int i = 0; i < QUEUE_SIZE; i++) {
 		printf("%d | ", queue[i]);
 	}
 	putchar('\n');
 	return 0;
 }
 
-//ƒGƒ‰[ƒƒbƒZ[ƒW•\¦ŠÖ”
+//ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤ºé–¢æ•°
 int showResult(int result) {
 	switch (result) {
 	case -101:
-		printf("ERROR %d: c—Ìˆæ‚ª‚ ‚è‚Ü‚¹‚ñ\n", result);
+		printf("ERROR %d: æ®‹é ˜åŸŸãŒã‚ã‚Šã¾ã›ã‚“\n", result);
 		break;
 	case -102:
-		printf("ERROR %d: •‰‚Ìƒf[ƒ^‚ª“ü—Í‚³‚ê‚Ä‚¢‚Ü‚·\n", result);
+		printf("ERROR %d: è² ã®ãƒ‡ãƒ¼ã‚¿ãŒå…¥åŠ›ã•ã‚Œã¦ã„ã¾ã™\n", result);
 		break;
 	case -201:
-		printf("ERROR %d: æ‚èo‚¹‚éƒf[ƒ^‚ª‚ ‚è‚Ü‚¹‚ñ\n", result);
+		printf("ERROR %d: å–ã‚Šå‡ºã›ã‚‹ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Šã¾ã›ã‚“\n", result);
 		break;
 	case 0:
-		printf("Ši”[¬Œ÷\n");
+		printf("æ ¼ç´æˆåŠŸ\n");
 		break;
 	default:
-		printf("æ‚èo‚µ¬Œ÷: %d\n", result);
+		printf("å–ã‚Šå‡ºã—æˆåŠŸ: %d\n", result);
 		break;
 	}
 

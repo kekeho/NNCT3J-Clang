@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 
 struct queue {
@@ -10,25 +10,25 @@ struct queue *bottomQueue = NULL;
 struct queue *topQueue = NULL;
 
 int enqueue(int data) {
-	int returnVal = 1; //�Ԃ��l�̐錾
+	int returnVal = 1; //返り値の宣言
 	struct queue *newQueue;
-	//�������𓮓I�m��
+	//メモリを動的確保
 	newQueue = (struct queue*)malloc(sizeof(struct queue));
 
-	if (newQueue == NULL) { //�������m�ێ��s��
+	if (newQueue == NULL) { //メモリ確保失敗時
 		returnVal = 0;
 	}
 	else {
-		newQueue->val = data; //�f�[�^���ǉ�
-		newQueue->addr = NULL; //�V����queue�̃A�h���X�l
+		newQueue->val = data; //データを追加
+		newQueue->addr = NULL; //新しいqueueのアドレス値
 
-		if (bottomQueue == NULL) { //�܂�1��queue�̂Ȃ��Ƃ�
-			bottomQueue = newQueue; //�ŌÂ�queue���X�V
-			topQueue = newQueue; //�ŐV��queue���X�V
+		if (bottomQueue == NULL) { //まだ1つもqueueのないとき
+			bottomQueue = newQueue; //最古のqueueを更新
+			topQueue = newQueue; //最新のqueueを更新
 		}
 		else {
-			topQueue->addr = newQueue; //�A��
-			topQueue = newQueue; //�ŐV��queue�̍X�V
+			topQueue->addr = newQueue; //連結
+			topQueue = newQueue; //最新のqueueの更新
 		}
 	}
 
@@ -38,7 +38,7 @@ int enqueue(int data) {
 }
 
 int dequeue() {
-	int returnVal = 0; //�Ԃ��l
+	int returnVal = 0; //返り値
 	struct queue *new_bottom;
 
 	if (topQueue == bottomQueue && bottomQueue != NULL) {
@@ -52,7 +52,7 @@ int dequeue() {
 		returnVal = bottomQueue->val;
 		struct queue *log = bottomQueue->addr;
 		free(bottomQueue);
-		bottomQueue = log; //�X�V
+		bottomQueue = log; //更新
 	}
 	else if (bottomQueue == NULL) {
 		returnVal = -201;
@@ -67,16 +67,16 @@ int dequeue() {
 int showResult(int result) {
 	switch (result) {
 	case 1:
-		printf("�i�[����\n");
+		printf("格納成功\n");
 		break;
 	case 0:
-		printf("ERROR %d: �������̊m�ۂ��ł��܂����ł���\n", result);
+		printf("ERROR %d: メモリの確保ができませんでした\n", result);
 		break;
 	case -201:
-		printf("ERROR %d: �����o�����f�[�^�������܂���\n", result);
+		printf("ERROR %d: 取り出せるデータがありません\n", result);
 		break;
 	default:
-		printf("�����o������: %d\n", result);
+		printf("取り出し成功: %d\n", result);
 		break;
 	}
 
@@ -86,6 +86,11 @@ int showResult(int result) {
 int showQueue() {
 	struct queue *x;
 	x = bottomQueue;
+	if (bottomQueue == NULL) {
+		printf("中身がありません\n");
+		return -1;
+	}
+
 	while (1) {
 		printf("%d | ", x->val);
 		x = x->addr;
@@ -98,6 +103,20 @@ int showQueue() {
 	return 0;
 }
 
+int freeQueue() {
+	if (bottomQueue == NULL) {
+		return 0; //既に解放済み
+	}
+
+	struct queue *log_queue;
+	while (bottomQueue != NULL) {
+		log_queue = bottomQueue->addr; //次にbuttomQueueになるものを一時的に保存
+		bottomQueue = log_queue;
+	}
+	topQueue = NULL;
+
+	return 0;
+}
 
 
 int main() {
@@ -106,5 +125,6 @@ int main() {
 	enqueue(30);
 	result = dequeue(); showResult(result);
 	showQueue();
-
+	freeQueue();
+	showQueue();
 }
